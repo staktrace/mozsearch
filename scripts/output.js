@@ -81,7 +81,8 @@ function generate(content, opt)
   <link href="/static/css/icons.css" rel="stylesheet" type="text/css" media="screen" />
   <link href="/static/css/selector-common.css" rel="stylesheet" type="text/css" media="screen" />
   <link href="/static/css/filter.css" rel="stylesheet" type="text/css" media="screen" />
-  <link href="/static/css/xcode.css" rel="stylesheet" type="text/css" media="screen">
+  <link href="/static/css/xcode.css" rel="stylesheet" type="text/css" media="screen" />
+  <link href="/static/opensearch-${tree}.xml" rel="search" type="application/opensearchdescription+xml" title="mozsearch - ${tree}" />
 </head>
 
 <body>

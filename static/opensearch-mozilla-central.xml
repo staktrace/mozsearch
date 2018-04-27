@@ -1,0 +1,13 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
+                       xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+  <ShortName>mozsearch - mozilla-central</ShortName>
+  <Description>Search over mozilla-central</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image width="16" height="16" type="image/x-icon">/static/icons/search.png</Image>
+  <Url type="text/html" template="/mozilla-central/search">
+    <Param name="q" value="{searchTerms}"/>
+    <Param name="path" value=""/>
+  </Url>
+  <Url type="application/x-suggestions+json" template="suggestionURL"/>
+  <moz:SearchForm>/mozilla-central/source</moz:SearchForm>
+</OpenSearchDescription>
