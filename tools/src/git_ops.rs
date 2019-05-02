@@ -176,7 +176,7 @@ impl FileDiffEntry {
 /// pathname if there was one.
 pub type TreeDiffCache = HashMap<(String, PathBuf), FileDiffEntry>;
 
-fn diff_trees<'a>(
+pub fn diff_trees<'a>(
     git_data: &'a GitData,
     commit: &Commit,
     parent_commit: &Commit,

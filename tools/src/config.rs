@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::io::BufReader;
 use std::io::Read;
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::collections::{BTreeMap, HashMap, HashSet, hash_set};
 use std::str;
 
 use rustc_serialize::json::{self, Json};
@@ -305,5 +305,9 @@ impl GitData {
         // special annotations like "#skip-blame" or backouts as well.
         // For now just check the list.
         self.blame_ignore.should_ignore(rev)
+    }
+
+    pub fn revs_to_ignore(&self) -> hash_set::Iter<String> {
+        self.blame_ignore.entries.iter()
     }
 }

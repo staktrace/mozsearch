@@ -19,6 +19,7 @@ linkify = "0.2.0"
 rls-analysis = "0.16"
 rls-data = "0.18"
 clap = "2"
+bcmp = "0.4"
 
 # Build release mode with line number info for easier debugging when
 # we hit panics in production
