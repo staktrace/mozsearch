@@ -1,0 +1,35 @@
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'maven'
+
+mainClassName = 'org.mozilla.mozsearch.JavaAnalyze'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.github.javaparser:javaparser-symbol-solver-core:3.15.18'
+    compile 'org.json:json:20190722'
+    testCompile 'junit:junit:3.8.1'
+}
+
+group = 'org.mozilla.mozsearch'
+version = '0.1'
+description = 'Java Analyzer for mozsearch'
+sourceCompatibility = '1.8'
+
+allprojects {
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
+}
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+}
