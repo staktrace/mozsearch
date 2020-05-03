@@ -13,7 +13,7 @@ fi
 CONFIG_FILE=$(realpath $1)
 TREE_NAME=$2
 
-cd $MOZSEARCH_PATH/java
-./gradlew run --args="$FILES_ROOT $INDEX_ROOT/analysis"
-cd -
-
+pushd $MOZSEARCH_PATH/java
+./gradlew fatJar
+popd
+java -cp $MOZSEARCH_PATH/java/build/libs/java-all-0.1.jar org.mozilla.mozsearch.JavaAnalyze "$FILES_ROOT" "$INDEX_ROOT/analysis"
