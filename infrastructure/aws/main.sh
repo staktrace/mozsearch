@@ -106,5 +106,7 @@ ${AWS_ROOT}/mkscratch.sh
 mkdir -p /mnt/index-scratch/tmp
 export TMPDIR=/mnt/index-scratch/tmp
 
+echo "Aborting"
+exit 1
 # Run target script with arguments supplied to this script.
 ${AWS_ROOT}/${TARGETSCRIPT} $*
