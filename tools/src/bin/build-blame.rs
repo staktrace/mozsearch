@@ -484,7 +484,7 @@ fn build_blame_tree(
                         None => None,
                         Some(tree) => tree
                             .get_name(entry_name)
-                            .map(|e| e.to_object(git_repo).unwrap())
+                            .map(|e| e.to_object(git_repo).ok())
                             .and_then(|o| o.into_tree().ok()),
                     };
                     parent_subtrees.push(parent_subtree);
