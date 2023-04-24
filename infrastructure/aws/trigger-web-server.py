@@ -131,13 +131,16 @@ webServerInstance.modify_attribute(BlockDeviceMappings=[{
     },
 }])
 
-# - Wait until the web server is ready to serve requests
+# - Wait until the web server is ready to serve requests. This normally takes
+# a minute or two, but give it 1 hour just to be conservative.
 
 ip = webServerInstance.private_ip_address
 
 print('Pinging web-server at %s to check readiness...' % ip)
 
-while True:
+webServerWaitStart = datetime.now()
+webServerStatusPassed = False
+while (datetime.now() - webServerWaitStart) < timedelta(hours = 1):
     try:
         status = subprocess.check_output(
             ["curl", "-f", "-s", "-m", "10.0", "http://%s/status.txt" % ip])
@@ -148,7 +151,16 @@ while True:
     except:
         time.sleep(10)
         continue
+
+    webServerStatusPassed = True
     break
+
+if not webServerStatusPassed:
+    print('Web server %s failed to become ready within allotted time. Shutting it down...' % webServerInstanceId)
+    ec2.stop_instances(InstanceIds=[webServerInstanceId])
+    print("Awaiting instance stop...")
+    awslib.await_instance(ec2, webServerInstanceId, None, 'stopped')
+    raise Exception('Unable to start web server')
 
 # - Run the sanity checks on the web server to ensure it is serving things fine
 
