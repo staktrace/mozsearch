@@ -5,7 +5,11 @@ IMAGE_NAME=${SEARCHFOX_DOCKER_IMAGE_NAME:-searchfox}
 CONTAINER_NAME=${SEARCHFOX_DOCKER_CONTAINER_NAME:-searchfox}
 VOLUME_NAME=${SEARCHFOX_DOCKER_VOLUME_NAME:-searchfox-vol}
 
+# Explicitly build with platform linux/amd64 so if you're running this on an
+# aarch64 macOS, it forces amd64. This is needed for the graphviz install
+# steps which attempt to install the amd64 binaries and fail on an aarch64 container.
 docker build \
+    --platform linux/amd64 \
     -t ${IMAGE_NAME} \
     --build-arg LOCAL_UID=$(id -u $USER) \
     --build-arg LOCAL_GID=$(id -g $USER) \
