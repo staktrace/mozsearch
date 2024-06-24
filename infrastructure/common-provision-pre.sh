@@ -72,14 +72,22 @@ sudo apt-get install -y fonts-noto-color-emoji
 # The most recent release version is 9.0 but the version available in 22.04 is
 # 2.x, so we donwload and use the official packages provided by the graphviz
 # project on gitlab.
-GRAPHVIZ_DEB_BUNDLE=ubuntu_22.04_graphviz-9.0.0-debs.tar.xz
 if [ ! -d $HOME/graphviz-install ]; then
   mkdir -p $HOME/graphviz-install
   pushd $HOME/graphviz-install
-  curl -O https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/9.0.0/$GRAPHVIZ_DEB_BUNDLE
-  tar xvf $GRAPHVIZ_DEB_BUNDLE
-  # using constrained wildcards here to not care too much about these versions
-  sudo apt-get install -y ./graphviz_*_amd64.deb ./libgraphviz4_*_amd64.deb ./libgraphviz-dev_*_amd64.deb
+  if [[ $(uname -p) == "aarch64" ]]; then
+    GRAPHVIZ_SOURCE_BUNDLE=graphviz-9.0.0.tar.xz
+    curl -O https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/9.0.0/$GRAPHVIZ_SOURCE_BUNDLE
+    tar xvf $GRAPHVIZ_SOURCE_BUNDLE
+    cd graphviz-9.0.0
+    ./configure && make && sudo make install
+  else
+    GRAPHVIZ_DEB_BUNDLE=ubuntu_22.04_graphviz-9.0.0-debs.tar.xz
+    curl -O https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/9.0.0/$GRAPHVIZ_DEB_BUNDLE
+    tar xvf $GRAPHVIZ_DEB_BUNDLE
+    # using constrained wildcards here to not care too much about these versions
+    sudo apt-get install -y ./graphviz_*_amd64.deb ./libgraphviz4_*_amd64.deb ./libgraphviz-dev_*_amd64.deb
+  fi
   popd
 fi
 
