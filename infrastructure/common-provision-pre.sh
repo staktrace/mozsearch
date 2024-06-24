@@ -185,7 +185,7 @@ if [ ! -d git-cinnabar ]; then
   sudo apt-get install -y mercurial
   # We started pinning in https://bugzilla.mozilla.org/show_bug.cgi?id=1779939
   # and it seems reasonable to stick to this for more deterministic provisioning.
-  CINNABAR_REVISION=0.6.3
+  CINNABAR_REVISION=d68de86e50b1027ae7a2588314090a60cbdd4a11
   git clone https://github.com/glandium/git-cinnabar
   pushd git-cinnabar
     git checkout $CINNABAR_REVISION
