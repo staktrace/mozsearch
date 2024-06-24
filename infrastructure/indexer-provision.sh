@@ -47,7 +47,11 @@ mise exec nodejs@18 -- npm install -g @asutherland/scip-python
 
 # Install a JDK and Coursier.
 sudo apt install -y openjdk-19-jdk
-curl -fL "https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux.gz" | gzip -d > cs
+if [[ $(uname -p) == "aarch64" ]]; then
+  curl -fL "https://github.com/coursier/launchers/raw/master/cs-aarch64-pc-linux.gz" | gzip -d > cs
+else
+  curl -fL "https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux.gz" | gzip -d > cs
+fi
 chmod +x cs
 ./cs setup --yes
 # Coursier adds itself to the path from ~/.profile, but add it now too

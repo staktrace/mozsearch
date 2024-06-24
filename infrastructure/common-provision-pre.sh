@@ -80,7 +80,10 @@ if [ ! -d $HOME/graphviz-install ]; then
     curl -O https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/9.0.0/$GRAPHVIZ_SOURCE_BUNDLE
     tar xvf $GRAPHVIZ_SOURCE_BUNDLE
     cd graphviz-9.0.0
-    ./configure && make && sudo make install
+    sudo apt install -y pkg-config
+    ./configure
+    make
+    sudo make install
   else
     GRAPHVIZ_DEB_BUNDLE=ubuntu_22.04_graphviz-9.0.0-debs.tar.xz
     curl -O https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/9.0.0/$GRAPHVIZ_DEB_BUNDLE
@@ -98,11 +101,15 @@ sudo apt-get install -y unzip libssl-dev
 if [ ! -d bazelisk ]; then
   mkdir bazelisk
   pushd bazelisk
-    curl -sSfL -O https://github.com/bazelbuild/bazelisk/releases/download/v1.11.0/bazelisk-linux-amd64
-    chmod +x bazelisk-linux-amd64
+    if [[ $(uname -p) == "aarch64" ]]; then
+      curl -sSfL -o bazelisk https://github.com/bazelbuild/bazelisk/releases/download/v1.11.0/bazelisk-linux-arm64
+    else
+      curl -sSfL -o bazelisk https://github.com/bazelbuild/bazelisk/releases/download/v1.11.0/bazelisk-linux-amd64
+    fi
+    chmod +x bazelisk
   popd
 fi
-BAZEL=~/bazelisk/bazelisk-linux-amd64
+BAZEL=~/bazelisk/bazelisk
 
 # Clang
 wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
@@ -193,12 +200,20 @@ fi
 
 # Install scip
 SCIP_VERSION=v0.3.3
-curl -L https://github.com/sourcegraph/scip/releases/download/$SCIP_VERSION/scip-linux-amd64.tar.gz | tar xzf - scip
+if [[ $(uname -p) == "aarch64" ]]; then
+  curl -L https://github.com/sourcegraph/scip/releases/download/$SCIP_VERSION/scip-linux-arm64.tar.gz | tar xzf - scip
+else
+  curl -L https://github.com/sourcegraph/scip/releases/download/$SCIP_VERSION/scip-linux-amd64.tar.gz | tar xzf - scip
+fi
 sudo ln -fs $(pwd)/scip /usr/local/bin/scip
 
 # Install rust-analyzer
 RUST_ANALYZER_VERSION=nightly
 rm -rf rust-analyzer rust-analyzer-linux-x64.vsix
-wget https://github.com/rust-lang/rust-analyzer/releases/download/$RUST_ANALYZER_VERSION/rust-analyzer-linux-x64.vsix
-unzip -o -d rust-analyzer rust-analyzer-linux-x64.vsix
+if [[ $(uname -p) == "aarch64" ]]; then
+  curl -L -o rust-analyzer.vsix https://github.com/rust-lang/rust-analyzer/releases/download/$RUST_ANALYZER_VERSION/rust-analyzer-linux-arm64.vsix
+else
+  wget -L -o rust-analyzer.vsix https://github.com/rust-lang/rust-analyzer/releases/download/$RUST_ANALYZER_VERSION/rust-analyzer-linux-x64.vsix
+fi
+unzip -o -d rust-analyzer rust-analyzer.vsix
 sudo ln -fs $(pwd)/rust-analyzer/extension/server/rust-analyzer /usr/local/bin/rust-analyzer
