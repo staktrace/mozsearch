@@ -29,7 +29,8 @@ def copy_objdir_files(dest_dir, config):
 
 # Make sure a failure during a prior invocation of this command does not break
 # our operation.  This step is not designed to run concurrently, so this is ok.
-shutil.rmtree('/tmp/dummy')
+if os.path.exists('/tmp/dummy'):
+    shutil.rmtree('/tmp/dummy')
 os.mkdir('/tmp/dummy')
 
 config_fname = sys.argv[1]
